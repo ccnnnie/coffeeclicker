@@ -5,11 +5,14 @@
  **************/
 
 function updateCoffeeView(coffeeQty) {
-  // your code here
+  const coffeeCounter = document.getElementById("coffee_counter");
+  coffeeCounter.innerText = coffeeQty;
 }
 
 function clickCoffee(data) {
-  // your code here
+  data.coffee++;
+  updateCoffeeView(data.coffee);
+  renderProducers(data);
 }
 
 /**************
@@ -17,21 +20,37 @@ function clickCoffee(data) {
  **************/
 
 function unlockProducers(producers, coffeeCount) {
-  // your code here
+  producers.forEach((producer) => {
+    let hasItBeenUnlocked = false;
+    if (coffeeCount >= producer.price / 2 && !hasItBeenUnlocked) {
+      producer.unlocked = true;
+      !hasItBeenUnlocked;
+    }
+  });
 }
 
 function getUnlockedProducers(data) {
-  // your code here
+  // returns array of producers that are unlocked
+  return data.producers.filter((producer) => {
+    return producer.unlocked;
+  });
 }
 
 function makeDisplayNameFromId(id) {
-  // your code here
+  let titleCaseId = id[0].toUpperCase() + id.slice(1);
+  // function passed into .replace -
+  // match = the matched substring ie. '_x'
+  // return value of function is used to replace the match
+  titleCaseId = titleCaseId.replace(/_[a-z]/gi, (match) => {
+    return ` ${match[1].toUpperCase()}`;
+  });
+  return titleCaseId;
 }
 
 // You shouldn't need to edit this function-- its tests should pass once you've written makeDisplayNameFromId
 function makeProducerDiv(producer) {
-  const containerDiv = document.createElement('div');
-  containerDiv.className = 'producer';
+  const containerDiv = document.createElement("div");
+  containerDiv.className = "producer";
   const displayName = makeDisplayNameFromId(producer.id);
   const currentCost = producer.price;
   const html = `
@@ -50,11 +69,22 @@ function makeProducerDiv(producer) {
 }
 
 function deleteAllChildNodes(parent) {
-  // your code here
+  // let childNodes = [...parent.childNodes];
+  // for (let i = 0; i < childNodes.length; i++) {
+  //   parent.removeChild(childNodes[i]);
+  // }
+  while (parent.childNodes.length > 0) {
+    parent.removeChild(parent.firstChild);
+  }
 }
 
 function renderProducers(data) {
-  // your code here
+  const producerContainer = document.getElementById("producer_container");
+  deleteAllChildNodes(producerContainer);
+  unlockProducers(data.producers, data.coffee);
+  getUnlockedProducers(data).forEach((producer) => {
+    producerContainer.appendChild(makeProducerDiv(producer));
+  });
 }
 
 /**************
@@ -62,32 +92,97 @@ function renderProducers(data) {
  **************/
 
 function getProducerById(data, producerId) {
-  // your code here
+  const producer = data.producers.filter(
+    (producer) => producer.id === producerId
+  );
+  return producer[0];
 }
 
 function canAffordProducer(data, producerId) {
-  // your code here
+  const producer = getProducerById(data, producerId);
+  if (data.coffee >= producer.price) {
+    return true;
+  } else return false;
 }
 
 function updateCPSView(cps) {
-  // your code here
+  const coffeePerSec = document.getElementById("cps");
+  coffeePerSec.innerText = cps;
 }
 
 function updatePrice(oldPrice) {
-  // your code here
+  return Math.floor(oldPrice * 1.25);
 }
 
 function attemptToBuyProducer(data, producerId) {
-  // your code here
+  if (canAffordProducer(data, producerId)) {
+    let producer = getProducerById(data, producerId);
+    producer.qty++;
+    data.coffee -= producer.price;
+    producer.price = updatePrice(producer.price);
+    data.totalCPS += producer.cps;
+    return true;
+  }
+  // return canAffordProducer(data, producerId);
+  return false;
 }
 
 function buyButtonClick(event, data) {
-  // your code here
+  const target = event.target;
+  // gets error "Attempted to wrap alert which is already wrapped"
+  //if (event.target.nodeName === "BUTTON") {
+  if (target.tagName !== "BUTTON") {
+    return;
+  }
+  if (!attemptToBuyProducer(data, target.id.slice(4))) {
+    window.alert("Not enough coffee!");
+  } else {
+    // update DOM to show info from data
+    renderProducers(data);
+    updateCoffeeView(data.coffee);
+    updateCPSView(data.totalCPS);
+  }
 }
 
 function tick(data) {
-  // your code here
+  data.coffee += data.totalCPS;
+  updateCoffeeView(data.coffee);
+  renderProducers(data);
 }
+
+function saveGameState(data) {
+  populateStorage(data);
+  console.log("saved game data", window.localStorage);
+}
+
+function restartGame() {
+  //window.localStorage.removeItem('savedGameDataObject')
+  window.localStorage.clear();
+  //removes all game data from storage
+  //data needs to revert back to original window.data values
+  console.log("removed game data", window.localStorage);
+  location.reload();
+}
+
+function populateStorage(data) {
+  window.localStorage.setItem("savedGameDataObject", JSON.stringify(data));
+  console.log(
+    "populating storage with",
+    window.localStorage.getItem("savedGameDataObject")
+  );
+  //setGameData();
+}
+
+// function setGameData() {
+//   const savedGame = JSON.parse(
+//     window.localStorage.getItem("savedGameDataObject")
+//   );
+//   console.log('saved game data is', savedGame)
+//   data = savedGame;
+//   updateCoffeeView(data.coffee);
+//   updateCPSView(data.totalCPS);
+//   console.log("game was updated with parsed saved game data", savedGame);
+// }
 
 /*************************
  *  Start your engines!
@@ -100,27 +195,50 @@ function tick(data) {
 // called any of them. Now it's time to get things moving.
 
 // We'll begin with a check to see if we're in a web browser; if we're just running this code in node for purposes of testing, we don't want to 'start the engines'.
-
 // How does this check work? Node gives us access to a global variable /// called `process`, but this variable is undefined in the browser. So,
 // we can see if we're in node by checking to see if `process` exists.
-if (typeof process === 'undefined') {
+if (typeof process === "undefined") {
   // Get starting data from the window object
   // (This comes from data.js)
-  const data = window.data;
+  let data = window.data;
+  const startingData = JSON.parse(JSON.stringify(window.data));
+
+  if (!window.localStorage.getItem("savedGameDataObject")) {
+    populateStorage(startingData);
+  } else {
+    // setGameData();
+    data = JSON.parse(window.localStorage.getItem("savedGameDataObject"));
+      //   console.log('saved game data is', savedGame)
+      //   data = savedGame;
+        updateCoffeeView(data.coffee);
+        updateCPSView(data.totalCPS);
+      //   console.log("game was updated with parsed saved game data", savedGame);
+  }
 
   // Add an event listener to the giant coffee emoji
-  const bigCoffee = document.getElementById('big_coffee');
-  bigCoffee.addEventListener('click', () => clickCoffee(data));
+  const bigCoffee = document.getElementById("big_coffee");
+  bigCoffee.addEventListener("click", () => clickCoffee(data));
 
   // Add an event listener to the container that holds all of the producers
   // Pass in the browser event and our data object to the event listener
-  const producerContainer = document.getElementById('producer_container');
-  producerContainer.addEventListener('click', event => {
+  const producerContainer = document.getElementById("producer_container");
+  producerContainer.addEventListener("click", (event) => {
     buyButtonClick(event, data);
   });
 
   // Call the tick function passing in the data object once per second
   setInterval(() => tick(data), 1000);
+
+  //save game state every 5 min (300000)
+  //save game every 5 sec for now - add button for manual save later
+  setInterval(() => saveGameState(data), 5000);
+
+  // const saveBtn = document.getElementById('save');
+  // saveBtn.addEventListener('click', () => saveGameState(data));
+
+  // Restart button resets game back to data.js file
+  const restartBtn = document.getElementById('restart');
+  restartBtn.addEventListener('click', () => restartGame());
 }
 // Meanwhile, if we aren't in a browser and are instead in node
 // we'll need to exports the code written here so we can import and
@@ -142,6 +260,6 @@ else if (process) {
     updatePrice,
     attemptToBuyProducer,
     buyButtonClick,
-    tick
+    tick,
   };
 }
