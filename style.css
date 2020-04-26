@@ -3,13 +3,54 @@
 }
 body {
   margin: 0px;
+  background-color:#242423;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
 }
+
+header {
+  display: flex;
+  justify-content: center;
+  background-color: #d2c6b9;
+  border-bottom: 2px solid black;
+}
+
+h1 {
+  font-family: 'Rock Salt', cursive;
+  color: black;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  padding: 0 6px;
+}
+
+.dot{
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.dot.red {
+  background-color: red;
+}
+
+.dot.blue {
+  background-color: deepskyblue;
+}
+
+.dot.yellow {
+  background-color: yellow;
+}
+
 .column-container {
   display: flex;
   width: 100%;
   height: 100vh;
   min-width: 650px;
+  height: calc(100vh - 100px);
 }
+
 .column {
   margin: 10px;
   margin-top: 0px;
@@ -17,13 +58,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid blue;
 }
 
 .container {
   width: 100%;
   height: calc(100vh - 40px);
 }
+
 .container.left {
   margin-top: 25px;
   margin-left: 5px;
@@ -31,25 +72,45 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid red;
+}
+
+#restart {
+  border: 1px solid white;
+  text-transform: uppercase;
+  background-color: black;
+  color: white;
 }
 
 .column-header {
   font-size: 25px;
   position: relative;
-  background-color: white;
+  background-color: #242423;
   top: 8px;
-  border: 2px solid green;
 }
+
 #big_coffee {
-  user-select: none;
-  font-size: 128px;
+  /* user-select: none; */
+  /* font-size: 128px; */
   cursor: pointer;
+  padding: 0 1rem;
+  margin: 30px;
+}
+
+#big_coffee img {
+  width: 300px;
+  /* max-width: 500px; */
 }
 
 .counter-container {
-  font-size: 30px;
+  font-size: 20px;
   margin: 10px;
+  text-align: center;
+}
+
+#coffee_counter {
+  font-size: 40px;
+  margin: 5px;
+  font-weight: 400;
 }
 
 .cps-container {
@@ -59,9 +120,9 @@ body {
 #producer_container {
   padding: 10px;
   overflow: auto;
-  border: 2px black solid;
+  border: 2px white solid;
   border-radius: 5px;
-  border: 2px solid orchid;
+  /* font-size: small; */
 }
 
 .producer {
@@ -72,6 +133,7 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
 .producer-column {
   display: flex;
   flex-direction: column;
@@ -85,4 +147,16 @@ body {
 .producer button {
   font-size: 15px;
   width: 50px;
+}
+
+.producer-column button {
+  background-color: #349c66;
+  border: 1px solid #b0a59a;
+  border-radius: 3px;
+  color: white;
+}
+
+button:hover {
+  text-decoration: underline;
+  box-shadow: 1px 1px #b0a59a;
 }

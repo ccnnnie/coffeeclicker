@@ -56,7 +56,10 @@ function makeProducerDiv(producer) {
   const html = `
   <div class="producer-column">
     <div class="producer-title">${displayName}</div>
+    <div>
     <button type="button" id="buy_${producer.id}">Buy</button>
+    <button type="button" id="sell_${producer.id}">Sell</button>
+    </div>
   </div>
   <div class="producer-column">
     <div>Quantity: ${producer.qty}</div>
@@ -129,8 +132,10 @@ function attemptToBuyProducer(data, producerId) {
 
 function buyButtonClick(event, data) {
   const target = event.target;
-  // gets error "Attempted to wrap alert which is already wrapped"
-  //if (event.target.nodeName === "BUTTON") {
+  // gets error from mocha but works in browser
+  // "Attempted to wrap alert which is already wrapped"
+  //if (event.target.innerText !== "BUTTON") {
+  //if (event.target.innerText !== "Buy") {
   if (target.tagName !== "BUTTON") {
     return;
   }
@@ -150,9 +155,48 @@ function tick(data) {
   renderProducers(data);
 }
 
+// SELLING PRODUCERS
+
+function canSellProducer(data, producerId) {
+  const producer = getProducerById(data, producerId);
+  if (producer.qty > 0) {
+    return true;
+  } else return false;
+}
+
+function attemptToSellProducer(data, producerId) {
+  if (canSellProducer(data, producerId)) {
+    let producer = getProducerById(data, producerId);
+    producer.qty--;
+    data.coffee += Math.floor(producer.price*.2);
+    data.totalCPS -= producer.cps;
+    return true;
+  }
+  return false;
+}
+
+function sellButtonClick(event, data) {
+  //works but gets errors bc clicking on Sell will also cause
+  //the buyButtonClick func to run
+  //otherwise mocha tests fail?
+  const target = event.target;
+    if(target.innerText === 'Sell') {
+      if (!attemptToSellProducer(data, target.id.slice(5))) {
+        window.alert("You don't have any to sell!");
+      } else {
+        renderProducers(data);
+        updateCoffeeView(data.coffee);
+        updateCPSView(data.totalCPS);
+      }
+    }
+  event.stopPropagation();
+}
+
+
+// SAVING AND RESTARTING GAME
 function saveGameState(data) {
   populateStorage(data);
-  console.log("saved game data", window.localStorage);
+  // console.log("saved game data", window.localStorage);
 }
 
 function restartGame() {
@@ -160,16 +204,16 @@ function restartGame() {
   window.localStorage.clear();
   //removes all game data from storage
   //data needs to revert back to original window.data values
-  console.log("removed game data", window.localStorage);
+  // console.log("removed game data", window.localStorage);
   location.reload();
 }
 
 function populateStorage(data) {
   window.localStorage.setItem("savedGameDataObject", JSON.stringify(data));
-  console.log(
-    "populating storage with",
-    window.localStorage.getItem("savedGameDataObject")
-  );
+  // console.log(
+  //   "populating storage with",
+  //   window.localStorage.getItem("savedGameDataObject")
+  // );
   //setGameData();
 }
 
@@ -224,6 +268,9 @@ if (typeof process === "undefined") {
   const producerContainer = document.getElementById("producer_container");
   producerContainer.addEventListener("click", (event) => {
     buyButtonClick(event, data);
+  });
+  producerContainer.addEventListener("click", (event) => {
+    sellButtonClick(event, data);
   });
 
   // Call the tick function passing in the data object once per second

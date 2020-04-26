@@ -4,10 +4,40 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400|Rock+Salt&display=swap" rel="stylesheet">
+
   <title>Coffee Clicker</title>
 </head>
 
 <body>
+  <header>
+    <h1>C</h1>
+    <span class="dot red"></span>
+    <h1>O</h1>
+    <span class="dot blue"></span>
+    <h1>F</h1>
+    <span class="dot yellow"></span>
+    <h1>F</h1>
+    <span class="dot red"></span>
+    <h1>E</h1>
+    <span class="dot blue"></span>
+    <h1>E</h1>
+
+    <h1 style="padding-left: 20px;">C</h1>
+    <span class="dot yellow"></span>
+    <h1>L</h1>
+    <span class="dot red"></span>
+    <h1>I</h1>
+    <span class="dot blue"></span>
+    <h1>C</h1>
+    <span class="dot yellow"></span>
+    <h1>K</h1>
+    <span class="dot red"></span>
+    <h1>E</h1>
+    <span class="dot blue"></span>
+    <h1>R</h1>
+  </header>
+
   <div id="test" class="column-container">
     <div class="column">
       <div class="container left">
@@ -15,16 +45,23 @@
           <button type="button" id="restart">Restart</button>
           <!-- <button type="button" id="save">Save</button> -->
         </div>
-        <div class="counter-container">Coffee: <span id="coffee_counter">0</span></div>
+        <div class="counter-container">
+          <div id="coffee_counter">0</div>
+          cups of coffee
+        </div>
         <div class="cps-container"><span id="cps">0</span> coffee/second</div>
-        <div id="big_coffee">☕️</div>
+        <!-- <div id="big_coffee">☕️</div> -->
+        <div id="big_coffee"><img src="/img/central-perk-sticker-no-bg.png"></div>
       </div>
     </div>
+
     <div class="column">
-      <div class="column-header">Coffee Producers</div>
+      <div class="column-header">Shop</div>
       <div class="container right" id="producer_container">
+        </div>
       </div>
     </div>
+
     <script type="text/javascript" src="data.js"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>
