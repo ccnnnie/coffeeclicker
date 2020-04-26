@@ -46,7 +46,6 @@ h1 {
 .column-container {
   display: flex;
   width: 100%;
-  height: 100vh;
   min-width: 650px;
   height: calc(100vh - 100px);
 }
@@ -92,8 +91,6 @@ h1 {
   /* user-select: none; */
   /* font-size: 128px; */
   cursor: pointer;
-  padding: 0 1rem;
-  margin: 30px;
 }
 
 #big_coffee img {
@@ -159,4 +156,28 @@ h1 {
 button:hover {
   text-decoration: underline;
   box-shadow: 1px 1px #b0a59a;
+}
+
+#instructions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#instructions-header {
+  font-size: 25px;
+  position: relative;
+  background-color: #242423;
+  top: 8px;
+}
+
+#instructions-list {
+  border: 2px white solid;
+  padding: 20px;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
 }
