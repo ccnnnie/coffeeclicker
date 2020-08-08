@@ -1,3 +1,7 @@
+# Deployed
+
+https://connielok.github.io/coffeeclicker/
+
 # DOM Homework
 
 Firstly, don't stress out that we will be using this test to judge you in any way except to understand how we can better help you.
@@ -87,9 +91,9 @@ This means that you wont't be able to pass some of the later tests until you pas
 
 Without breaking any of the tests, can you find a way to implement one or more of the following features?
 
-- Periodically save the game state using `window.localStorage` so that the player doesn't have to start over every time they refresh the page; load the game state from `window.localStorage` when the page loads. ([This](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) might be useful.)
-- Edit `style.css` to change the application's color scheme to something more appropriate to a coffee-themed game
-- Add in the ability to sell producers for a full (or partial?) refund of one's coffee
+- ✅ Periodically save the game state using `window.localStorage` so that the player doesn't have to start over every time they refresh the page; load the game state from `window.localStorage` when the page loads. ([This](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) might be useful.)
+- ✅ Edit `style.css` to change the application's color scheme to something more appropriate to a coffee-themed game
+- ✅ Add in the ability to sell producers for a full (or partial?) refund of one's coffee
 - Add in a one-time unlock-able upgrade system like Cookie Clicker's. Example upgrades: buying a Coffee Grinder upgrade might double the CPS of all percolators; buying extra cursors would increase the coffee one gets from clicks; buying a Caffeinated Cursor upgrade might make the coffee one gets from clicks in some way proportionate to total CPS. Note that this is a big, complex feature!
 - Do you think progress in the game is too fast? Maybe too slow? Try modifying the data to see if you can balance the game to your liking. You might also modify the formula which increases the prices when producers are purchased.
-- Figure out how to deploy your completed application to the public internet using Github Pages. Google is your friend, here, but [here's a start](https://www.ostraining.com/blog/coding/github-pages/).
+- ✅ Figure out how to deploy your completed application to the public internet using Github Pages. Google is your friend, here, but [here's a start](https://www.ostraining.com/blog/coding/github-pages/).
